@@ -42,7 +42,6 @@ function initHeroLayout() {
   cachedNavH = navWrap.offsetHeight;
   const vh  = cachedVh;
   const dtH = cachedDtH;
-  const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
   const isMobile  = window.innerWidth <= 640;
   const navOffset = isMobile ? 18 : 30;
 
@@ -69,8 +68,13 @@ function initHeroLayout() {
     hero.style.paddingBottom  = '';
     hero.style.justifyContent = 'flex-start';
   } else {
-    const gap = Math.min(8.5 * rem, vh * 0.2);
-    hero.style.paddingTop     = (vh * 0.1 + dtH + gap) + 'px';
+    const titleBottom     = vh * 0.1 + dtH;
+    const bioScrollEl     = document.getElementById('bio-scroll');
+    const bioH            = bioScrollEl ? bioScrollEl.offsetHeight : 0;
+    const availableBottom = 0.26 * vh + bioH;
+    const objectsH        = objectsEl.offsetHeight;
+    const availableH      = vh - titleBottom - availableBottom;
+    hero.style.paddingTop     = (titleBottom + Math.max(0, (availableH - objectsH) / 2)) + 'px';
     hero.style.paddingBottom  = '';
     hero.style.justifyContent = '';
   }
