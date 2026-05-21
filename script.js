@@ -47,7 +47,7 @@ function initHeroLayout() {
   const navOffset = isMobile ? 18 : 30;
 
   titleStartY  = vh * 0.1 - TITLE_STICKY;
-  navStickyTop = dtH + 30;
+  navStickyTop = TITLE_STICKY + dtH + 10;
 
   titleEl.style.top       = TITLE_STICKY + 'px';
   titleEl.style.transform = `translateY(${titleStartY}px)`;
@@ -458,7 +458,7 @@ document.querySelectorAll('a[href^="https://"]').forEach(a => {
 // ── Init ──
 initHeroLayout();
 initMagneticRepel();
-document.fonts.ready.then(initHeroLayout); // re-measure after web fonts settle
+document.fonts.ready.then(() => requestAnimationFrame(initHeroLayout)); // re-measure after web fonts settle
 showTab(window.location.hash || '#info');
 loadObjects();
 onScroll();
