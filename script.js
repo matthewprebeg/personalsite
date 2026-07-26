@@ -173,8 +173,10 @@ const panels = document.querySelectorAll('.panel');
 
 function showTab(hash) {
   const id = (hash || '').replace('#', '');
+  const isDesign = id === 'design';
 
-  tabs.forEach(t => t.classList.toggle('active', !!id && t.getAttribute('href') === `#${id}`));
+  tabs.forEach(t => t.classList.toggle('active', !!id && t.getAttribute('href') === (isDesign ? '#studio' : `#${id}`)));
+
   panels.forEach(p => {
     const match = !!id && p.id === `panel-${id}`;
     p.classList.remove('active', 'visible');
@@ -462,7 +464,14 @@ document.querySelectorAll('a[href^="https://"]').forEach(a => {
 // ── Init ──
 initHeroLayout();
 initMagneticRepel();
-document.fonts.ready.then(() => requestAnimationFrame(initHeroLayout)); // re-measure after web fonts settle
+document.fonts.ready.then(() => requestAnimationFrame(() => {
+  initHeroLayout();
+  if (window.location.hash === '#design') applyScroll(cachedVh);
+}));
 showTab(window.location.hash || '#info');
 loadObjects();
 onScroll();
+if (window.location.hash === '#design') {
+  applyScroll(cachedVh);
+  requestAnimationFrame(() => applyScroll(cachedVh));
+}
