@@ -464,14 +464,28 @@ document.querySelectorAll('a[href^="https://"]').forEach(a => {
 // ── Init ──
 initHeroLayout();
 initMagneticRepel();
+  // Scrolls content-section flush below the title + nav, same math as the tab-click handler
+function scrollBelowNav() {
+  const headerH = titleEl.offsetHeight + 20 + navWrap.offsetHeight;
+  const top = contentSec.getBoundingClientRect().top + window.scrollY - headerH;
+  window.scrollTo(0, top);
+}
+
 document.fonts.ready.then(() => requestAnimationFrame(() => {
   initHeroLayout();
-  if (window.location.hash === '#design') applyScroll(cachedVh);
+  if (window.location.hash === '#design') {
+    applyScroll(cachedVh);
+    scrollBelowNav();
+  }
 }));
 showTab(window.location.hash || '#info');
 loadObjects();
 onScroll();
 if (window.location.hash === '#design') {
   applyScroll(cachedVh);
-  requestAnimationFrame(() => applyScroll(cachedVh));
+  scrollBelowNav();
+  requestAnimationFrame(() => {
+    applyScroll(cachedVh);
+    scrollBelowNav();
+  });
 }
